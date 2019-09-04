@@ -1,37 +1,43 @@
 # Log processing
 
-* [Overview](#overview)
-* [Project setup](#project-setup)
-   * [`bats` acceptance tests](#bats-acceptance-tests)
-   * [Working with the team repository](#working-with-the-team-repository)
-   * [Directory structure](#directory-structure)
-   * [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
-* [Outline of our solution](#the-outline-of-our-solution)
-   * [Top-level `process_logs.sh`](#top-level-process_logssh)
-   * [Write `process_client_logs.sh`](#write-process_client_logssh)
-   * [Write `create_username_dist.sh`](#write-create_username_distsh)
-   * [Write `create_hours_dist.sh`](#write-create_hours_distsh)
-   * [Write `create_country_dist.sh`](#write-create_country_distsh)
-   * [Write `assemble_report.sh`](#write-assemble_reportsh)
-* [Final thoughts](#final-thoughts)
-* [What to turn in](#what-to-turn-in)
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Overview](#overview)
+- [Project setup](#project-setup)
+	- [`bats` acceptance tests](#bats-acceptance-tests)
+	- [Working with the team repository](#working-with-the-team-repository)
+	- [Directory structure](#directory-structure)
+	- [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
+- [The outline of our solution](#the-outline-of-our-solution)
+	- [Overview](#overview)
+	- [Top-level `process_logs.sh`](#top-level-processlogssh)
+	- [Write `process_client_logs.sh`](#write-processclientlogssh)
+	- [Write `create_username_dist.sh`](#write-createusernamedistsh)
+	- [Write `create_hours_dist.sh`](#write-createhoursdistsh)
+	- [Write `create_country_dist.sh`](#write-createcountrydistsh)
+	- [Write `assemble_report.sh`](#write-assemblereportsh)
+	- [Now write `process_logs.sh`](#now-write-processlogssh)
+- [Final thoughts](#final-thoughts)
+- [What to turn in](#what-to-turn-in)
+
+<!-- /TOC -->
 
 ## Overview
 
 This lab is an example of a very common system administration task: Processing
 log files. Most modern operating systems generate a *lot* of logging
 information but, sadly, most of it is ignored, in part because of the huge
-quantity generated. A common way of (partially) dealing with this mass of data 
+quantity generated. A common way of (partially) dealing with this mass of data
 is to write scripts that sift through the logs looking for particular
 patterns and/or summarizing behaviors of interest. (This idea of using log analysis
 for this lab was suggested by John Wagener, a UMM CSci alum who does this kind
 of processing in his work in security analysis.)
 
 In this lab we will be given a number of (old, from 2011) `secure` log files from several of
-the lab machines. Our lab uses Redhat Linux and, at the time, essentially anything 
-to do with authentication was stored in `/var/log/secure`.  Debian systems used 
-a different, but similar file named `auth.log` and newer Linux systems using `systemd` require 
-the use of a special command called `journalctl` to extract that same information.  However, 
+the lab machines. Our lab uses Redhat Linux and, at the time, essentially anything
+to do with authentication was stored in `/var/log/secure`.  Debian systems used
+a different, but similar file named `auth.log` and newer Linux systems using `systemd` require
+the use of a special command called `journalctl` to extract that same information.  However,
 even if the security information is not stored in one file, per se, the extracted data
 has the same format as the old `/var/log/secure` files, so this type of processing remains relevant.
 
@@ -68,7 +74,7 @@ you start working on a higher level script like `process_logs.sh`.
 ### Working with the team repository
 
 When you accept the GitHub Classroom assignment you and your team-mates should have access to the same repository.
-It's fine if both group members clone the the project but be sure to **commit often** and you might 
+It's fine if both group members clone the the project but be sure to **commit often** and you might
 want to explore the use of `git pull` (or `git fetch` and `git merge`) to make sure everybody's
 cloned repositories match.
 
@@ -165,8 +171,8 @@ written. So we'll describe it top-down, but you should probably write the
 process_logs.sh this_secure.tgz that_secure.tgz...
 ```
 
-where the files have the form `<machine name>_secure.tgz`. The 
-file `toad_secure.tgz` would be a compressed `tar` archive containing 
+where the files have the form `<machine name>_secure.tgz`. The
+file `toad_secure.tgz` would be a compressed `tar` archive containing
 the relevent log files from a machine named `toad`.
 
 `process_logs.sh` then:
@@ -472,7 +478,7 @@ graph, and then wrapping it in the country distribution header and footer using
 the summarized `failed_login_data.txt` files. Here, however, we can't just count
 occurrences of different IP addresses, we have to first map the IP addresses to
 countries. There are a number of web services that will attempt (with
-considerable success) to map IP addresses to locations. 
+considerable success) to map IP addresses to locations.
 Rather than requiring that everyone sign up for such a service, we signed up
 and created a file of IP addresses and countries for all
 the IP addresses that appear in the data we're using here; we've provided that
@@ -506,9 +512,9 @@ Like the previous three scripts, this script again takes a directory name as its
 sole command line argument. That directory is assumed to contain the three files
 you've generated above:
 
-* `username_dist.html`
-* `hours_dist.html`
 * `country_dist.html`
+* `hours_dist.html`
+* `username_dist.html`
 
 It collects together the contents of those files (we used `cat`) and then uses
 `wrap_contents.sh` to add the overall HTML header and footer, writing the
