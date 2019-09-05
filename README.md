@@ -400,7 +400,7 @@ of `uniq` and ran it through a simple `awk` command that converted the output of
 file, which I then handed to `wrap_contents.sh` to add the username header and
 footer.
 
-:ALERT: You may find you need to put a single quote (&apos;) inside an awk
+:warning: You may find you need to put a single quote (&apos;) inside an awk
 command that is itself in single quotes. There are several ways to deal with
 this, all of them apparently fairly ugly. One reasonable approach is to use
 
