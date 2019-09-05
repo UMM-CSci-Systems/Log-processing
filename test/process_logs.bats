@@ -27,10 +27,10 @@ teardown() {
 # for the bar chart for the hour data from discovery and velcro.
 @test "bin/process_logs.sh generates correct simple output" {
   bin/process_logs.sh log_files/*_secure.tgz
-  BATS_TMPDIR=`mktemp --directory`
-  sort test/summary_plots.html > $BATS_TMPDIR/target.txt
-  sort failed_login_summary.html > $BATS_TMPDIR/sorted.txt
-  run diff -wbB $BATS_TMPDIR/target.txt $BATS_TMPDIR/sorted.txt
-  rm -rf $BATS_TMPDIR
+  BATS_TMPDIR=$(mktemp --directory)
+  sort test/summary_plots.html > "$BATS_TMPDIR"/target.txt
+  sort failed_login_summary.html > "$BATS_TMPDIR"/sorted.txt
+  run diff -wbB "$BATS_TMPDIR"/target.txt "$BATS_TMPDIR"/sorted.txt
+  rm -rf "$BATS_TMPDIR"
   [ "$status" -eq 0 ]
 }
