@@ -21,5 +21,5 @@ jobs:
       with:
         submodules: true
     - name: Run the wrap_contents tests
-      run: bats assemble_report.bats
-      working-directory: ./wrap_contents
+      run: bats tests/assemble_report.bats
+      working-directory: .

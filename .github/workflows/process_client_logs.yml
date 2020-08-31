@@ -21,5 +21,5 @@ jobs:
       with:
         submodules: true
     - name: Run the wrap_contents tests
-      run: bats process_client_logs.bats
-      working-directory: ./wrap_contents
+      run: bats tests/process_client_logs.bats
+      working-directory: .
