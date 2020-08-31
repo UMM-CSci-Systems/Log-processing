@@ -1,24 +1,32 @@
-# Log processing
+# Log processing <!-- omit in toc -->
+
+[![Process client logs](../../workflows/Process%20client%20logs/badge.svg)](../../actions?query=workflow%3A"Process+client+logs")
+[![Create username dist](../../workflows/Create%20username%20dist/badge.svg)](../../actions?query=workflow%3A"Create+username+dist")
+[![Create hours dist](../../workflows/Create%20hours%20dist/badge.svg)](../../actions?query=workflow%3A"Create+hours+dist")
+[![Create country dist](../../workflows/Create%20country%20dist/badge.svg)](../../actions?query=workflow%3A"Create+country+dist")
+[![Assemble report](../../workflows/Assemble%20report/badge.svg)](../../actions?query=workflow%3A"Assemble+report")
+[![Process logs](../../workflows/Process%20logs/badge.svg)](../../actions?query=workflow%3A"Process+logs")
+[![Shellcheck](../../workflows/shellcheck/badge.svg)](../../actions?query=workflow%3A"shellcheck")
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Overview](#overview)
-- [Project setup](#project-setup)
-	- [`bats` acceptance tests](#bats-acceptance-tests)
-	- [Working with the team repository](#working-with-the-team-repository)
-	- [Directory structure](#directory-structure)
-	- [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
-- [The outline of our solution](#the-outline-of-our-solution)
-	- [Overview](#overview)
-	- [Top-level `process_logs.sh`](#top-level-processlogssh)
-	- [Write `process_client_logs.sh`](#write-processclientlogssh)
-	- [Write `create_username_dist.sh`](#write-createusernamedistsh)
-	- [Write `create_hours_dist.sh`](#write-createhoursdistsh)
-	- [Write `create_country_dist.sh`](#write-createcountrydistsh)
-	- [Write `assemble_report.sh`](#write-assemblereportsh)
-	- [Now write `process_logs.sh`](#now-write-processlogssh)
-- [Final thoughts](#final-thoughts)
-- [What to turn in](#what-to-turn-in)
+* [Overview](#overview)
+* [Project setup](#project-setup)
+  * [`bats` acceptance tests](#bats-acceptance-tests)
+  * [Working with the team repository](#working-with-the-team-repository)
+  * [Directory structure](#directory-structure)
+  * [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
+* [The outline of our solution](#the-outline-of-our-solution)
+  * [Overview](#overview-1)
+  * [Top-level `process_logs.sh`](#top-level-process_logssh)
+  * [Write `process_client_logs.sh`](#write-process_client_logssh)
+  * [Write `create_username_dist.sh`](#write-create_username_distsh)
+  * [Write `create_hours_dist.sh`](#write-create_hours_distsh)
+  * [Write `create_country_dist.sh`](#write-create_country_distsh)
+  * [Write `assemble_report.sh`](#write-assemble_reportsh)
+  * [Now write `process_logs.sh`](#now-write-process_logssh)
+* [Final thoughts](#final-thoughts)
+* [What to turn in](#what-to-turn-in)
 
 <!-- /TOC -->
 
