@@ -4,8 +4,8 @@ load 'test_helper/bats-support/load'
 load 'test_helper/bats-assert/load'
 load 'test_helper/bats-file/load'
 
-# Create a temporary scratch directory for the shell script to work in.
 setup() {
+  # Create a temporary scratch directory for the shell script to work in.
   BATS_TMPDIR=$(temp_make)
 
   # The comments below disable a shellcheck warning that would
