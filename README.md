@@ -175,7 +175,8 @@ in a header and footer comes up so much in this lab that we pulled it out into a
 separate script `wrap_contents.sh` which you wrote in the pre-lab. One of the
 early activities of your group should be to compare notes on your different
 solutions to `wrap_contents.sh` and pick one to be the one you'll use in this
-lab. Place that script in your project's `bin` directory.
+lab. **Place that version of `wrap_contents.sh` in your project's `bin` directory;**
+it'll be really useful as a utility throughout this lab.
 
 ## The outline of our solution
 
