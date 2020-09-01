@@ -8,8 +8,6 @@
 [![Process logs](../../workflows/Process%20logs/badge.svg)](../../actions?query=workflow%3A"Process+logs")
 [![Shellcheck](../../workflows/shellcheck/badge.svg)](../../actions?query=workflow%3A"shellcheck")
 
-<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
 * [Overview](#overview)
 * [Project setup](#project-setup)
   * [`bats` acceptance tests](#bats-acceptance-tests)
@@ -17,7 +15,7 @@
   * [Directory structure](#directory-structure)
   * [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
 * [The outline of our solution](#the-outline-of-our-solution)
-  * [Overview](#overview-1)
+  * [Solution overview](#solution-overview)
   * [Top-level `process_logs.sh`](#top-level-process_logssh)
   * [Write `process_client_logs.sh`](#write-process_client_logssh)
   * [Write `create_username_dist.sh`](#write-create_username_distsh)
@@ -27,8 +25,6 @@
   * [Now write `process_logs.sh`](#now-write-process_logssh)
 * [Final thoughts](#final-thoughts)
 * [What to turn in](#what-to-turn-in)
-
-<!-- /TOC -->
 
 ## Overview
 
@@ -57,13 +53,11 @@ each of the log files, extract the relevant information, and generate HTML and
 JavaScript code that (via Google's chart tools) will generate graphs
 showing:
 
-* A <a href="http://code.google.com/apis/chart/interactive/docs/gallery/piechart.html">pie chart</a> showing the frequency of attacks on various user names.
-* A <a href="https://developers.google.com/chart/interactive/docs/gallery/columnchart">column chart</a> showing the frequency of attacks during the hours of the day.
-* A <a href="http://code.google.com/apis/chart/interactive/docs/gallery/geochart.html">GeoChart</a> showing the frequency of attacks by country of origin.
+* A [pie chart](http://code.google.com/apis/chart/interactive/docs/gallery/piechart.html) showing the frequency of attacks on various user names.
+* A [column chart](https://developers.google.com/chart/interactive/docs/gallery/columnchart) showing the frequency of attacks during the hours of the day.
+* A [GeoChart](http://code.google.com/apis/chart/interactive/docs/gallery/geochart.html) showing the frequency of attacks by country of origin.
 
-<a
-href="http://www.morris.umn.edu/~mcphee/Courses/Examples/summary_plots.html">Go
-here</a> to see what your graphs might look like.
+[Go here](http://facultypages.morris.umn.edu/~mcphee/Courses/Examples/summary_plots.html) to see what your graphs might look like.
 
 Be warned, this is going to be a fairly complex lab with a lot of new
 technologies, and for some may prove one of the most challenging labs of the
@@ -103,7 +97,7 @@ have cleared) hopefully you'll be completely green!
 
 Note that there is a badge for `shellcheck`, so you'll
 want to make sure your scripts are nice and shiny clean
-so that `shellcheck` is happy as well. 
+so that `shellcheck` is happy as well.
 :grin:
 
 ### Working with the team repository
@@ -180,7 +174,7 @@ it'll be really useful as a utility throughout this lab.
 
 ## The outline of our solution
 
-### Overview
+### Solution overview
 
 This is a fairly complex specification, so we're going to write several smaller
 scripts that we can assemble to provide the desired functionality. Think of the
@@ -257,7 +251,7 @@ As an example, assume:
 
 Then, after extraction, `/tmp/tmp_logs` might look like:
 
-```
+```bash
 /tmp/tmp_logs/
 ├── duck
 │   └── var
@@ -302,7 +296,7 @@ many files there are or what they're called. The script `process_client_logs.sh`
 will process those log files and generate an intermediate file called
 `failed_login_data.txt` in that same directory having the following format:
 
-```
+```bash
 Aug 14 06 admin 218.2.129.13
 Aug 14 06 root 218.2.129.13
 Aug 14 06 stud 218.2.129.13
@@ -335,7 +329,7 @@ different events, but we only care about two particular kinds of lines. The
 first is for failed login attempts on invalid usernames, i.e., names that aren't
 actual user names in our lab, e.g.:
 
-```
+```bash
 Aug 14 06:00:36 computer_name sshd[26795]: Failed password for invalid user admin from 218.2.129.13 port 59638 ssh2
 Aug 14 06:00:55 computer_name sshd[26807]: Failed password for invalid user stud from 218.2.129.13 port 4182 ssh2
 Aug 14 06:01:00 computer_name sshd[26809]: Failed password for invalid user trash from 218.2.129.13 port 7503 ssh2
@@ -345,7 +339,7 @@ Aug 14 06:01:04 computer_name sshd[26811]: Failed password for invalid user aaro
 The second is for failed login attempts on names that are actual user names in
 the lab, e.g.:
 
-```
+```bash
 Aug 14 06:00:41 computer_name sshd[26798]: Failed password for root from 218.2.129.13 port 62901 ssh2
 Aug 14 06:01:29 computer_name sshd[26831]: Failed password for mcphee from 140.113.131.4 port 17537 ssh2
 Aug 14 06:01:39 computer_name sshd[26835]: Failed password for root from 218.2.129.13 port 21275 ssh2
@@ -418,7 +412,7 @@ the number of occurrences of each of the usernames that appear in the
 JavaScript lines. For each username count, we need to add a row with that
 information; this is accomplished with the line
 
-```
+```javascript
 data.addRow(['Hermione', 42]);
 ```
 
@@ -440,7 +434,7 @@ footer.
 command that is itself in single quotes. There are several ways to deal with
 this, all of them apparently fairly ugly. One reasonable approach is to use
 
-```
+```bash
 \x27
 ```
 
@@ -459,13 +453,20 @@ sets up exactly such a directory for the automatic tests, so you can use
 that sequence of instructions to guide the construction of your own test
 directory.
 
+:warning: **NOTE:** In the full dataset there are user names that contain
+`_` (underscore) and `-` (dash). The data used by `create_username_dist.bats`
+does _not_ include any names with those characters. Thus if you don't handle
+these characters correctly the tests here will pass, but you will then have
+inexplicable failures later on when you do run the "full"
+tests in `process_logs.bats`.
+
 ### Write `create_hours_dist.sh`
 
 This is almost identical to `create_username_dist.sh` above, except that you
 extract the hours column instead of the username column, and write the results
 to the file `hours_dist.html`. The target lines will look something like:
 
-```
+```javascript
 data.addRow(['04', 87]);
 ```
 
@@ -576,7 +577,10 @@ your head against the wall, you probably want to stop and ask some questions.
 
 Commit early and often. Do this is bite-sized chunks, try stuff out in the shell
 and then move that into your script when you've got it working. Commit again.
-Ask more questions.
+Ask more questions. :warning: **Use descriptive, coherent commit messages.**
+There is a rubric item for appropriate sized commits _and_ one for "Commit
+messages convey useful information about the development process", so keep
+that in mind as you're working so you don't lose points unnecessarily.
 
 Our primary criteria here are, as always, correctness and clarity. When you get
 the whole thing working and the `bats` tests passing, you can actually compare
@@ -594,7 +598,7 @@ you create and then go check by hand that your script removes them.
 
 Note that "real" bash programmers probably wouldn't create this many helper
 scripts, both for cultural reasons and because there is some overhead in having
-one script call another instead of just staying in the original script. bash
+one script call another instead of just staying in the original script. `bash`
 scripting does allow for the definition of functions, which we could use to
 provide this structure for our solution, but that introduces a new set of
 complications, and it's tricky to test the functions independently using the
