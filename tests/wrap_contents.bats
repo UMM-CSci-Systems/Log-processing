@@ -24,7 +24,7 @@ teardown() {
 # If this test fails, your script either didn't run at all, or it
 # generated some sort of error when it ran.
 @test "bin/wrap_contents.sh runs successfully" {
-  cd test/simple_wrap_contents_example
+  cd tests/simple_wrap_contents_example
   run ../../bin/wrap_contents.sh test_middle.txt test_ends "$BATS_TMPDIR"/result.html
   [ "$status" -eq 0 ]
 }
@@ -34,7 +34,7 @@ teardown() {
 # script by hand and compare the results to the expected output
 # in test_output.html.
 @test "bin/wrap_contents.sh generates correct simple output" {
-  cd test/simple_wrap_contents_example
+  cd tests/simple_wrap_contents_example
   run ../../bin/wrap_contents.sh test_middle.txt test_ends "$BATS_TMPDIR"/result.html
   run diff -wbB test_output.html "$BATS_TMPDIR"/result.html
   [ "$status" -eq 0 ]
@@ -45,7 +45,7 @@ teardown() {
 # hand and compare the results to the expected output in
 # chart_example/sample_chart.html
 @test "bin/wrap_contents.sh generates correct plot output" {
-  cd test/chart_wrap_contents_example
+  cd tests/chart_wrap_contents_example
   ../../bin/wrap_contents.sh meats.txt bread "$BATS_TMPDIR"/chart_result.html
   run diff -wbB sample_chart.html "$BATS_TMPDIR"/chart_result.html
   [ "$status" -eq 0 ]
