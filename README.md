@@ -79,6 +79,33 @@ We've provided a collection of `bats` acceptance tests (the files ending in
 the tests for a helper script (e.g., `create_country_dist.sh`) pass before
 you start working on a higher level script like `process_logs.sh`.
 
+:warning: **IMPORTANT** :warning: You _must_ add the Bats dependencies as submodules:
+
+```bash
+git submodule add https://github.com/bats-core/bats-support tests/test_helper/bats-support
+
+git submodule add https://github.com/bats-core/bats-assert tests/test_helper/bats-assert
+
+git submodule add https://github.com/bats-core/bats-file tests/test_helper/bats-file
+```
+
+If you don't do this the `bats` tests won't work, either
+in your space or in GitHub Actions.
+
+Each of the `.bats` files has a corresponding GitHub Action
+so it will be run every time to you push changes up to GitHub.
+Watch your red `x`s and green checkmarks to make sure that
+GitHub is getting the same results as you.
+
+We also created badges at the top of this README for each
+of the `.bats` files. When everything is done (and the caches
+have cleared) hopefully you'll be completely green!
+
+Note that there is a badge for `shellcheck`, so you'll
+want to make sure your scripts are nice and shiny clean
+so that `shellcheck` is happy as well. 
+:grin:
+
 ### Working with the team repository
 
 When you accept the GitHub Classroom assignment you and your team-mates should have access to the same repository.
