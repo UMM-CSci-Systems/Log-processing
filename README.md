@@ -11,9 +11,9 @@
 - [Overview](#overview)
 - [Project setup](#project-setup)
   - [`bats` acceptance tests](#bats-acceptance-tests)
-  - [Working with the team repository](#working-with-the-team-repository)
   - [Directory structure](#directory-structure)
   - [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
+  - [Copy over your `wrap_contents.sh` from the pre-lab](#copy-over-your-wrap_contentssh-from-the-pre-lab)
 - [The outline of our solution](#the-outline-of-our-solution)
   - [Solution overview](#solution-overview)
   - [Top-level `process_logs.sh`](#top-level-process_logssh)
@@ -33,11 +33,12 @@ log files. Most modern operating systems generate a *lot* of logging
 information but, sadly, most of it is ignored, in part because of the huge
 quantity generated. A common way of (partially) dealing with this mass of data
 is to write scripts that sift through the logs looking for particular
-patterns and/or summarizing behaviors of interest. (This idea of using log analysis
-for this lab was suggested by John Wagener, a UMM CSci alum who does this kind
+patterns and/or summarizing behaviors of interest in something like a dashboard.
+(This idea of using log analysis
+for this lab was suggested by John Wagener, a UMM CSci alum was doing this kind
 of processing in his work in security analysis.)
 
-In this lab we will be given a number of (old, from 2011) `secure` log files from several of
+In this lab we will be given a number of (old, from 2011) log files from several of
 the lab machines. Our lab uses Fedora Linux and, at the time, essentially anything
 to do with authentication was stored in `/var/log/secure`.  Debian systems used
 a different, but similar file named `auth.log` and newer Linux systems using `systemd` require
@@ -45,7 +46,7 @@ the use of a special command called `journalctl` to extract that same informatio
 even if the security information is not stored in one file, per se, the extracted data
 has the same format as the old `/var/log/secure` files, so this type of processing remains relevant.
 
-The `secure` files contain both successful and unsuccessful login
+These log files contain both successful and unsuccessful login
 attempts.  We're going to focus on summarizing the unsuccessful login attempts,
 most of which are clearly attempts by hackers to gain access through improperly
 secured accounts. You'll write a collection of shell scripts that go through
@@ -70,8 +71,8 @@ questions when you get stuck!
 
 We've provided a collection of `bats` acceptance tests (the files ending in
 `.bats` in `tests`) for each of the scripts. You probably want to make sure
-the tests for a helper script (e.g., `create_country_dist.sh`) pass before
-you start working on a higher level script like `process_logs.sh`.
+the tests for helper scripts (e.g., `create_country_dist.sh`) pass before
+you start working on a higher level scripts like `process_logs.sh`.
 
 :warning: **IMPORTANT** :warning: You _must_ add the Bats dependencies as submodules:
 
@@ -84,7 +85,13 @@ git submodule add https://github.com/bats-core/bats-file tests/test_helper/bats-
 ```
 
 If you don't do this the `bats` tests won't work, either
-in your space or in GitHub Actions.
+in your space or in GitHub Actions. If you're having trouble with things like `file not
+found` errors, you might try the following, which frequently seems to fix submodule
+problems:
+
+```bash
+  git submodule update --init --recursive
+```
 
 Each of the `.bats` files has a corresponding GitHub Action
 so it will be run every time to you push changes up to GitHub.
@@ -93,28 +100,35 @@ GitHub is getting the same results as you.
 
 We also created badges at the top of this README for each
 of the `.bats` files. When everything is done (and the caches
-have cleared) hopefully you'll be completely green!
+have refreshed) hopefully you'll be completely green!
 
 Note that there is a badge for `shellcheck`, so you'll
 want to make sure your scripts are nice and shiny clean
 so that `shellcheck` is happy as well.
 :grin:
 
-### Working with the team repository
-
-When you accept the GitHub Classroom assignment you and your team-mates should have access to the same repository.
-It's fine if both group members clone the the project but be sure to **commit often** and you might
-want to explore the use of `git pull` (or `git fetch` and `git merge`) to make sure everybody's
-cloned repositories match.
-
 ### Directory structure
 
 The repository that we give you contains log file data along with tests for each
-of the scripts you need to write if you follow our outline solution below. The
-directory structure we provide includes:
+of the scripts you need to write if you follow our solution as outlined below. The top
+level of the directory structure we provide looks like:
+
+```text
+.
+├── LICENSE
+├── README.md
+├── bin/
+├── etc/
+├── examples/
+├── html_components/
+├── log_files/
+└── tests/
+```
+
+Each of these directories plays an important role in the project:
 
 - `bin`: This is where you should put the shell scripts you write. The `bats`
-   tests will assume your scripts are there (and executable) and will fail if
+   tests will assume your script files are there (and executable) and will fail if
    they are not.
 - `tests`: This contains the `bats` tests you will be using to test each step
    of the lab. In theory you should not need to change anything in this
@@ -130,13 +144,18 @@ directory structure we provide includes:
    file that maps IP addresses to their hosting country. Again, you should not
    need to change anything here, but your scripts will need to use things that
    are here.
-- `examples`: Contains some example files.
+- `examples`: Contains some example files, such as an example of what the target
+  HTML file should look like.
 
 ### Structure of HTML/JavaScript file
 
-Based on the documentation and examples on the [Google
-Chart](http://code.google.com/apis/chart/) site, our target HTML/JavaScript file
-will have the structure like `examples/summary_plots.html` (look at the HTML in
+Our target HTML/JavaScript file is designed to use the [Google
+Chart](http://code.google.com/apis/chart/) tools to generate the desired graphs;
+[see their documentation](http://code.google.com/apis/chart/) for lots of useful
+details.
+
+The structure of our target file is illustrated in `examples/summary_plots.html`
+(look at the HTML in
 an editor, or by viewing the source in your browser).  We've divided the example
 HTML/JavaScript into several sections, each of which is labelled in that example
 file:
@@ -161,6 +180,8 @@ you really need to do is pattern match. If, however, you run into a typo-induced
 error or other snag, having some understanding of what's going on here will help
 make debugging a lot simpler. So definitely look this over, ask questions, and
 look things up.
+
+### Copy over your `wrap_contents.sh` from the pre-lab
 
 As discussed in the
 [pre-lab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab), this idea
@@ -190,8 +211,8 @@ solution this way as well.
 ### Top-level `process_logs.sh`
 
 We'll start our description with a "top-level" script `process_logs.sh` which is
-what you call to "run the program". This is _not_ where you should start the
-programming, though, because this won't work until all the helper scripts are
+what you call to "run the program". **This is _not_ where you should start the
+programming**, though, because this won't work until all the helper scripts are
 written. So we'll describe it top-down, but you should probably write the
 "helper" scripts (described below) first, and save `process_logs.sh` for last.
 
@@ -208,19 +229,19 @@ the relevant log files from a machine named `toad`.
 `process_logs.sh` then:
 
 - Creates a temporary scratch directory to store all the intermediate files in.
-- Loops over the compressed `tar` files provided on the command line,
+- **Loops over the compressed `tar` files** provided on the command line,
   extracting the contents of each file we were given. See below for more
   info on the recommended file structure after extracting the log files.
   - The set of files to work with for the lab are in the `log_files`
     directory of your project.  
 - Calls `process_client_logs.sh` on each client's set of logs to generate a
-  set of temporary, intermediate files that are documented below. This needs to
-  happen once for every set of client logs; you can just do it in the same
+  set of temporary, intermediate files that are documented below. **This needs to
+  happen once for every set of client logs**; you can just do it in the same
   loop that does the extraction above.
 - Calls `create_username_dist.sh` which reads the intermediate files and
   generates the subset of an HTML/JavaScript document that uses Google's
   charting tools to create a pie chart showing the usernames with the most
-  failed logins. This and the following steps only need to happen once, and thus
+  failed logins. **This and the following steps only need to happen once**, and thus
   should _not_ be in the extraction/processing loop.
 - Calls `create_hours_dist.sh` which reads the intermediate files and
   generates the subset of an HTML/JavaScript document that uses Google's
@@ -236,6 +257,14 @@ the relevant log files from a machine named `toad`.
 - Moves the resulting `failed_login_summary.html` file from the scratch
   directory back up to the directory where `process_logs.sh` was called.
 
+We'll use the `wrap_contents.sh` you wrote in [the
+pre-lab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab) to simplify
+the generation of the desired HTML/JavaScript documents.
+
+We have `bats` tests for each of these shell scripts so you can do them one at
+time (in the order that they're discussed below) and have some confidence that
+you have one working before you move on to the next.
+
 Our solution extracts the contents of each archive into a directory (in the
 scratch directory) with the same name as the client in the temporary
 directory. Thus when you extract the contents of `toad_secure.tgz` you'd
@@ -245,7 +274,8 @@ keep the logs from different machines from getting mixed up with each other.
 
 As an example, assume:
 
-- There are three log files for the machines `duck`, `goose`, and `toad`
+- There are three log archive files `duck.tgz`, `goose.tgz`, and `toad.tgz`,
+  for the machines `duck`, `goose`, and `toad` respectively
 - Each of which had five log files
 - The temporary scratch directory is `/tmp/tmp_logs`.
 
@@ -279,19 +309,12 @@ Then, after extraction, `/tmp/tmp_logs` might look like:
 │           └── secure-20110814
 ```
 
-We'll use the `wrap_contents.sh` you wrote in [the
-pre-lab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab) to simplify
-the generation of the desired HTML/JavaScript documents.
-
-We have `bats` tests for each of these shell scripts so you can do them one at
-time (in the order that they're discussed below) and have some confidence that
-you have one working before you move on to the next.
-
 ### Write `process_client_logs.sh`
 
 This script takes a directory as a command line argument and does all its work
 in that directory. That directory is assumed to contain the un-tarred and
-un-gzipped log files for a _single_ client, but we don't know in advance how
+un-gzipped log files for a _single_ client, e.g., `duck` or `goose` in the example
+above. We _don't_ know in advance how
 many files there are or what they're called. The script `process_client_logs.sh`
 will process those log files and generate an intermediate file called
 `failed_login_data.txt` in that same directory having the following format:
@@ -324,12 +347,12 @@ bats tests/process_client_logs.bats
 
 in the top of your project directory.
 
-The `secure` files contain a wide variety of entries documenting numerous
+The log files contain a wide variety of entries documenting numerous
 different events, but we only care about two particular kinds of lines. The
 first is for failed login attempts on invalid usernames, i.e., names that aren't
 actual user names in our lab, e.g.:
 
-```bash
+```text
 Aug 14 06:00:36 computer_name sshd[26795]: Failed password for invalid user admin from 218.2.129.13 port 59638 ssh2
 Aug 14 06:00:55 computer_name sshd[26807]: Failed password for invalid user stud from 218.2.129.13 port 4182 ssh2
 Aug 14 06:01:00 computer_name sshd[26809]: Failed password for invalid user trash from 218.2.129.13 port 7503 ssh2
@@ -339,7 +362,7 @@ Aug 14 06:01:04 computer_name sshd[26811]: Failed password for invalid user aaro
 The second is for failed login attempts on names that are actual user names in
 the lab, e.g.:
 
-```bash
+```text
 Aug 14 06:00:41 computer_name sshd[26798]: Failed password for root from 218.2.129.13 port 62901 ssh2
 Aug 14 06:01:29 computer_name sshd[26831]: Failed password for mcphee from 140.113.131.4 port 17537 ssh2
 Aug 14 06:01:39 computer_name sshd[26835]: Failed password for root from 218.2.129.13 port 21275 ssh2
@@ -348,7 +371,8 @@ Aug 14 06:01:39 computer_name sshd[26835]: Failed password for root from 218.2.1
 Thus the task for `process_client_logs.sh` is to take all the log files in the
 specified directory, extract all the lines of the two forms illustrated above,
 and extract the five columns we need. Our solution had the following steps, using
-Unix pipes to take out output of one step and make it the input of the next step:
+Unix pipes in various places to take the output of one step and make it the input
+of the next step:
 
 1. Move to the specified directory.
 2. Gather the contents of all the log files in that directory and pipe
@@ -410,24 +434,24 @@ data section from the summarized `failed_login_data.txt` files. We need to count
 the number of occurrences of each of the usernames that appear in the
 `failed_login_data.txt` files, and then turn those counts into the appropriate
 JavaScript lines. For each username count, we need to add a row with that
-information; this is accomplished with the line
+information; this is accomplished with lines of the form
 
 ```javascript
 data.addRow(['Hermione', 42]);
 ```
 
-where the first argument to `addRow` is the username, and the second is the
-number of failed logins on that username.
+where the argument to `addRow` is an array containing two items (in order): the
+username, and the number of failed logins on that username.
 
 Gathering the contents of the `failed_login_data.txt` files and extracting the
 username columns is quite similar to the start of `process_client_logs.sh`. Once
 you have that, the trick is to figure out how to count how many times each
 username appears. It turns out that the command `uniq` has a flag that counts
 occurrences just as we need. The one trick is `uniq` needs its input to be
-sorted; the command 'sort' will take care of this nicely. I then took the output
+sorted; the command 'sort' will take care of this nicely. We then took the output
 of `uniq` and ran it through a simple `awk` command that converted the output of
-'uniq' into the desired `data.addRow` lines. I dumped that into a temporary
-file, which I then handed to `wrap_contents.sh` to add the username header and
+'uniq' into the desired `data.addRow` lines. We dumped that into a temporary
+file, which we then handed to `wrap_contents.sh` to add the username header and
 footer.
 
 :warning: You may find you need to put a single quote (&apos;) inside an awk
@@ -438,7 +462,7 @@ this, all of them apparently fairly ugly. One reasonable approach is to use
 \x27
 ```
 
-Backslash-x will, in the shell and actually in most programming languages let
+Backslash-x will, in many programming languages, let
 you specify a character via the hexadecimal (hence the 'x' for 'hex') code for
 that character. If you look at an ASCII table you'll find that single quote has
 a hex code of 27. So a string like `"it\x27s"` will give you `"it's"`.
@@ -449,9 +473,9 @@ well, you should see a pie chart showing the distribution of usernames that were
 attacked. Running it on its own requires that you have a directory with all the
 right pieces in it, though, which isn't entirely trivial to set up. The body
 of the `setup()` function in the `bats` test (`create_username_dist.bats`)
-sets up exactly such a directory for the automatic tests, so you can use
+sets up exactly such a directory for the automatic tests, so **you can use
 that sequence of instructions to guide the construction of your own test
-directory.
+directory**.
 
 :warning: **NOTE:** In the full dataset there are user names that contain
 `_` (underscore) and `-` (dash). The data used by `create_username_dist.bats`
@@ -471,8 +495,8 @@ data.addRow(['04', 87]);
 ```
 
 where '04' is the hour and 87 is the number of failed login attempts that
-happened in that hour. The hour is a two character string representing the hour
-in military or 24-hour time, i.e., 10pm is '22'.
+happened in that hour. **The hour is a two character string** representing the hour
+in military or 24-hour time, i.e., 10pm is `'22'`.
 
 Again, a simple set of `bats` tests for this script are located in
 `tests/create_hours_dist.bats`. To run them just type
@@ -574,6 +598,14 @@ really nifty graphs, but there's definitely a lot of work involved. That said,
 our solution is under 100 total lines, with comments. So if you find yourself
 writing an epic novel of shell script commands, or are just stuck and beating
 your head against the wall, you probably want to stop and ask some questions.
+
+It's tempting on a project like this to decide to split the work up, and say
+Sally will do half the scripts and Chris will do the other half.
+**We do not recommend splitting up the work** like this. There's a _lot_ of
+overhead at the start that you really don't want to duplicate, so you almost
+certainly want to work together at much as feasible. The goal is to avoid having
+everyone hack through the same swamp independently, when you could have
+just done that once together.
 
 Commit early and often. Do this is bite-sized chunks, try stuff out in the shell
 and then move that into your script when you've got it working. Commit again.
