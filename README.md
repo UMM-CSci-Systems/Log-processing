@@ -8,23 +8,23 @@
 [![Process logs](../../workflows/Process%20logs/badge.svg)](../../actions?query=workflow%3A"Process+logs")
 [![Shellcheck](../../workflows/shellcheck/badge.svg)](../../actions?query=workflow%3A"shellcheck")
 
-* [Overview](#overview)
-* [Project setup](#project-setup)
-  * [`bats` acceptance tests](#bats-acceptance-tests)
-  * [Working with the team repository](#working-with-the-team-repository)
-  * [Directory structure](#directory-structure)
-  * [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
-* [The outline of our solution](#the-outline-of-our-solution)
-  * [Solution overview](#solution-overview)
-  * [Top-level `process_logs.sh`](#top-level-process_logssh)
-  * [Write `process_client_logs.sh`](#write-process_client_logssh)
-  * [Write `create_username_dist.sh`](#write-create_username_distsh)
-  * [Write `create_hours_dist.sh`](#write-create_hours_distsh)
-  * [Write `create_country_dist.sh`](#write-create_country_distsh)
-  * [Write `assemble_report.sh`](#write-assemble_reportsh)
-  * [Now write `process_logs.sh`](#now-write-process_logssh)
-* [Final thoughts](#final-thoughts)
-* [What to turn in](#what-to-turn-in)
+- [Overview](#overview)
+- [Project setup](#project-setup)
+  - [`bats` acceptance tests](#bats-acceptance-tests)
+  - [Working with the team repository](#working-with-the-team-repository)
+  - [Directory structure](#directory-structure)
+  - [Structure of HTML/JavaScript file](#structure-of-htmljavascript-file)
+- [The outline of our solution](#the-outline-of-our-solution)
+  - [Solution overview](#solution-overview)
+  - [Top-level `process_logs.sh`](#top-level-process_logssh)
+  - [Write `process_client_logs.sh`](#write-process_client_logssh)
+  - [Write `create_username_dist.sh`](#write-create_username_distsh)
+  - [Write `create_hours_dist.sh`](#write-create_hours_distsh)
+  - [Write `create_country_dist.sh`](#write-create_country_distsh)
+  - [Write `assemble_report.sh`](#write-assemble_reportsh)
+  - [Now write `process_logs.sh`](#now-write-process_logssh)
+- [Final thoughts](#final-thoughts)
+- [What to turn in](#what-to-turn-in)
 
 ## Overview
 
@@ -38,7 +38,7 @@ for this lab was suggested by John Wagener, a UMM CSci alum who does this kind
 of processing in his work in security analysis.)
 
 In this lab we will be given a number of (old, from 2011) `secure` log files from several of
-the lab machines. Our lab uses Redhat Linux and, at the time, essentially anything
+the lab machines. Our lab uses Fedora Linux and, at the time, essentially anything
 to do with authentication was stored in `/var/log/secure`.  Debian systems used
 a different, but similar file named `auth.log` and newer Linux systems using `systemd` require
 the use of a special command called `journalctl` to extract that same information.  However,
@@ -53,9 +53,9 @@ each of the log files, extract the relevant information, and generate HTML and
 JavaScript code that (via Google's chart tools) will generate graphs
 showing:
 
-* A [pie chart](http://code.google.com/apis/chart/interactive/docs/gallery/piechart.html) showing the frequency of attacks on various user names.
-* A [column chart](https://developers.google.com/chart/interactive/docs/gallery/columnchart) showing the frequency of attacks during the hours of the day.
-* A [GeoChart](http://code.google.com/apis/chart/interactive/docs/gallery/geochart.html) showing the frequency of attacks by country of origin.
+- A [pie chart](http://code.google.com/apis/chart/interactive/docs/gallery/piechart.html) showing the frequency of attacks on various user names.
+- A [column chart](https://developers.google.com/chart/interactive/docs/gallery/columnchart) showing the frequency of attacks during the hours of the day.
+- A [GeoChart](http://code.google.com/apis/chart/interactive/docs/gallery/geochart.html) showing the frequency of attacks by country of origin.
 
 [Go here](http://facultypages.morris.umn.edu/~mcphee/Courses/Examples/summary_plots.html) to see what your graphs might look like.
 
@@ -113,24 +113,24 @@ The repository that we give you contains log file data along with tests for each
 of the scripts you need to write if you follow our outline solution below. The
 directory structure we provide includes:
 
-* `bin`: This is where you should put the shell scripts you write. The `bats`
+- `bin`: This is where you should put the shell scripts you write. The `bats`
    tests will assume your scripts are there (and executable) and will fail if
    they are not.
-* `tests`: This contains the `bats` tests you will be using to test each step
+- `tests`: This contains the `bats` tests you will be using to test each step
    of the lab. In theory you should not need to change anything in this
    directory. You are welcome to extend the tests, but please don't change
    them without reason.
-* `log_files`: This has `tar` archives containing some old log files from
+- `log_files`: This has `tar` archives containing some old log files from
    several machines.
-* `html_components`: This contains the headers and footers that wrap the
+- `html_components`: This contains the headers and footers that wrap the
    contents of your data so Google magic can make pretty charts. You should not
    need to change anything in this directory, but your scripts will need to
    use things that are here.
-* `etc`:  Contains miscellaneous files; currently the only thing here is a
+- `etc`:  Contains miscellaneous files; currently the only thing here is a
    file that maps IP addresses to their hosting country. Again, you should not
    need to change anything here, but your scripts will need to use things that
    are here.
-* `examples`: Contains some example files.
+- `examples`: Contains some example files.
 
 ### Structure of HTML/JavaScript file
 
@@ -141,20 +141,20 @@ an editor, or by viewing the source in your browser).  We've divided the example
 HTML/JavaScript into several sections, each of which is labelled in that example
 file:
 
-* An overall header, which contains the opening HTML tags and loads the
+- An overall header, which contains the opening HTML tags and loads the
   necessary JavaScript libraries from Google.
-* A header for the section that defines the username pie chart. This
+- A header for the section that defines the username pie chart. This
   includes the setting of a callback so that the function
   `drawUsernameDistribution()` gets called when the page loads, and the start
   of the definition of the function `drawUsernameDistribution()`.
-* The actual username data, which is discussed in more detail below.
-* A footer for the username graph section, which wraps up the definition
+- The actual username data, which is discussed in more detail below.
+- A footer for the username graph section, which wraps up the definition
   of `drawUsernameDistribution()`.
-* Similar header, data, and footer sections for the hours distribution column
+- Similar header, data, and footer sections for the hours distribution column
   chart, defining the function `drawHoursDistribution()`.
-* Similar header, data, and footer sections for the country distribution
+- Similar header, data, and footer sections for the country distribution
   geo chart, defining the function `drawCountryDistribution()`.
-* An overall footer, which finishes off the document.
+- An overall footer, which finishes off the document.
 
 You don't actually have to understand any of this HTML or JavaScript since all
 you really need to do is pattern match. If, however, you run into a typo-induced
@@ -163,7 +163,7 @@ make debugging a lot simpler. So definitely look this over, ask questions, and
 look things up.
 
 As discussed in the
-[prelab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab), this idea
+[pre-lab](https://github.com/UMM-CSci-Systems/Log-processing-pre-lab), this idea
 of taking some text (e.g., the data for the username pie chart) and wrapping it
 in a header and footer comes up so much in this lab that we pulled it out into a
 separate script `wrap_contents.sh` which you wrote in the pre-lab. One of the
@@ -203,37 +203,37 @@ process_logs.sh this_secure.tgz that_secure.tgz...
 
 where the files have the form `<machine name>_secure.tgz`. The
 file `toad_secure.tgz` would be a compressed `tar` archive containing
-the relevent log files from a machine named `toad`.
+the relevant log files from a machine named `toad`.
 
 `process_logs.sh` then:
 
-* Creates a temporary scratch directory to store all the intermediate files in.
-* Loops over the compressed `tar` files provided on the command line,
+- Creates a temporary scratch directory to store all the intermediate files in.
+- Loops over the compressed `tar` files provided on the command line,
   extracting the contents of each file we were given. See below for more
   info on the recommended file structure after extracting the log files.
-  * The set of files to work with for the lab are in the `log_files`
+  - The set of files to work with for the lab are in the `log_files`
     directory of your project.  
-* Calls `process_client_logs.sh` on each client's set of logs to generate a
+- Calls `process_client_logs.sh` on each client's set of logs to generate a
   set of temporary, intermediate files that are documented below. This needs to
   happen once for every set of client logs; you can just do it in the same
   loop that does the extraction above.
-* Calls `create_username_dist.sh` which reads the intermediate files and
+- Calls `create_username_dist.sh` which reads the intermediate files and
   generates the subset of an HTML/JavaScript document that uses Google's
   charting tools to create a pie chart showing the usernames with the most
   failed logins. This and the following steps only need to happen once, and thus
   should _not_ be in the extraction/processing loop.
-* Calls `create_hours_dist.sh` which reads the intermediate files and
+- Calls `create_hours_dist.sh` which reads the intermediate files and
   generates the subset of an HTML/JavaScript document that uses Google's
   charting tools to create a column chart showing the hours of the day with
   the most failed logins.
-* Calls `create_country_dist.sh` which reads the intermediate files and
+- Calls `create_country_dist.sh` which reads the intermediate files and
   generates the subset of an HTML/JavaScript document that uses Google's
   charting tools to create a map chart showing the countries where most of
   the failed logins came from.
-* Calls `assemble_report.sh` which pulls the results from the previous
+- Calls `assemble_report.sh` which pulls the results from the previous
   three scripts into a single HTML/JavaScript document that generates the
   three desired plots in a single page.
-* Moves the resulting `failed_login_summary.html` file from the scratch
+- Moves the resulting `failed_login_summary.html` file from the scratch
   directory back up to the directory where `process_logs.sh` was called.
 
 Our solution extracts the contents of each archive into a directory (in the
@@ -245,9 +245,9 @@ keep the logs from different machines from getting mixed up with each other.
 
 As an example, assume:
 
-* There are three log files for the machines `duck`, `goose`, and `toad`
-* Each of which had five log files
-* The temporary scratch directory is `/tmp/tmp_logs`.
+- There are three log files for the machines `duck`, `goose`, and `toad`
+- Each of which had five log files
+- The temporary scratch directory is `/tmp/tmp_logs`.
 
 Then, after extraction, `/tmp/tmp_logs` might look like:
 
@@ -423,7 +423,7 @@ Gathering the contents of the `failed_login_data.txt` files and extracting the
 username columns is quite similar to the start of `process_client_logs.sh`. Once
 you have that, the trick is to figure out how to count how many times each
 username appears. It turns out that the command `uniq` has a flag that counts
-occurrances just as we need. The one trick is `uniq` needs its input to be
+occurrences just as we need. The one trick is `uniq` needs its input to be
 sorted; the command 'sort' will take care of this nicely. I then took the output
 of `uniq` and ran it through a simple `awk` command that converted the output of
 'uniq' into the desired `data.addRow` lines. I dumped that into a temporary
@@ -549,9 +549,9 @@ Like the previous three scripts, this script again takes a directory name as its
 sole command line argument. That directory is assumed to contain the three files
 you've generated above:
 
-* `country_dist.html`
-* `hours_dist.html`
-* `username_dist.html`
+- `country_dist.html`
+- `hours_dist.html`
+- `username_dist.html`
 
 It collects together the contents of those files (we used `cat`) and then uses
 `wrap_contents.sh` to add the overall HTML header and footer, writing the
@@ -629,16 +629,16 @@ approach was probably a bad idea.
 The `bin` folder in your finished project on Github folder should have the
 following files:
 
-* [ ] `assemble_report.sh`
-* [ ] `create_country_dist.sh`
-* [ ] `create_username_dist.sh`
-* [ ] `create_hours_dist.sh`
-* [ ] `process_client_logs.sh`
-* [ ] `process_logs.sh`
-* [ ] `wrap_contents.sh`
+- [ ] `assemble_report.sh`
+- [ ] `create_country_dist.sh`
+- [ ] `create_username_dist.sh`
+- [ ] `create_hours_dist.sh`
+- [ ] `process_client_logs.sh`
+- [ ] `process_logs.sh`
+- [ ] `wrap_contents.sh`
 
 You shouldn't need to change anything in the other folders, but since your code
 depends on them, you should leave them in your project repository for
 completeness.
 
-* [ ] Be sure to submit a link to your team's repository in Canvas!
+- [ ] Be sure to submit a link to your team's repository in Canvas!
