@@ -39,7 +39,7 @@ for this lab was suggested by John Wagener, a UMM CSci alum was doing this kind
 of processing in his work in security analysis.)
 
 In this lab we will be given a number of (old, from 2011) log files from several of
-the lab machines. Our lab uses Fedora Linux and, at the time, essentially anything
+the lab machines. Our computer lab used Fedora Linux and, at the time, essentially anything
 to do with authentication was stored in `/var/log/secure`.  Debian systems used
 a different, but similar file named `auth.log` and newer Linux systems using `systemd` require
 the use of a special command called `journalctl` to extract that same information.  However,
