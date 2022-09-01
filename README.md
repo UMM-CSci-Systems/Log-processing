@@ -77,11 +77,9 @@ you start working on a higher level scripts like `process_logs.sh`.
 :warning: **IMPORTANT** :warning: You _must_ add the Bats dependencies as submodules:
 
 ```bash
-git submodule add https://github.com/bats-core/bats-support tests/test_helper/bats-support
+git submodule init
 
-git submodule add https://github.com/bats-core/bats-assert tests/test_helper/bats-assert
-
-git submodule add https://github.com/bats-core/bats-file tests/test_helper/bats-file
+git submodule update
 ```
 
 If you don't do this the `bats` tests won't work, either
