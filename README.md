@@ -556,7 +556,7 @@ works.
 After you've converted IP addresses to country codes, you can extract the
 country codes, count their occurrences (like we counted usernames before), and
 generate the necessary `data.addRow` lines, which again look like
-`data.addRow(['04', 87]);`. Remember to then wrap those with the appropriate
+`data.addRow(['US', 87]);`. Remember to then wrap those with the appropriate
 header and footer, and you're done with this part.
 
 Again, that you can test the output for this by wrapping it with the overall
