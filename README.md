@@ -65,6 +65,9 @@ technologies, and for some may prove one of the most challenging labs of the
 semester! Come prepared, work well together, work smart, and ask lots of
 questions when you get stuck!
 
+We will break the lab into two parts, but your teams/pairs will be the same for both
+parts. At the end of the first part, you are asked to create a tag in git (see Canvas).
+
 ## Project setup
 
 ### `bats` acceptance tests
@@ -261,7 +264,23 @@ the generation of the desired HTML/JavaScript documents.
 
 We have `bats` tests for each of these shell scripts so you can do them one at
 time (in the order that they're discussed below) and have some confidence that
-you have one working before you move on to the next.
+you have one working before you move on to the next. The tests are set up
+to be run from the top-level folder of the project and accessing the 
+appropriate test file from the `test` folder. For example, once you bring over 
+your `wrap_contents.sh` script from the pre-lab, put it in the `bin` folder in
+this lab, and update the permissions to make it executable (by running 
+`chmod +x wrap_contents.sh` in the `bin` folder), you can run the tests 
+like so:
+
+```bash
+bats ./tests/wrap_contents.bats
+```
+
+As with the previous lab work, a typical workflow might be to work on a
+particular shell script, run the `bats` test for that script, and find the
+first failed test in the output to determine what to focus on next. You
+should continue to use `shellcheck` as well, but that won't usually help
+drive your workflow as much as the `bats` tests.
 
 Our solution extracts the contents of each archive into a directory (in the
 scratch directory) with the same name as the client in the temporary
@@ -482,6 +501,14 @@ these characters correctly the tests here will pass, but you will then have
 inexplicable failures later on when you do run the "full"
 tests in `process_logs.bats`.
 
+This is the stopping point for the first part of the log processing lab.
+Remember to make and push a tag to GitHub when you get to this point. Your
+teams will be the same for part two, so feel free to continue along when you
+get here once you have made and pushed that tag AND posted a link on Canvas 
+as your submission to "(Lab 1) Log Processing - first part" assignment
+that will take us to your tag. This will let
+the TAs and instructor know your work for part one is ready to grade.
+
 ### Write `create_hours_dist.sh`
 
 This is almost identical to `create_username_dist.sh` above, except that you
@@ -671,4 +698,7 @@ You shouldn't need to change anything in the other folders, but since your code
 depends on them, you should leave them in your project repository for
 completeness.
 
-- [ ] Be sure to submit a link to your team's repository in Canvas!
+- [ ] At the end of part 1, post a link on Canvas 
+as your submission to the "(Lab 1) Log Processing - first part" assignment
+that will take us to your git tag you made and pushed to GitHub
+- [ ] At the end of part 2, submit a text entry on Canvas for the "(Lab 1) Log Processing - second part" assignment to let us know your work is ready to grade
